@@ -1,26 +1,41 @@
-import React from 'react';
+// src/pages/Home.jsx
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/button';
 import Card from '../components/ui/card';
-import CardContent from '..//components/ui/cardContent';
+import CardContent from '../components/ui/cardContent';
+import { useAuth } from '../context/AuthContext';
+import ProfileModal from '../components/ProfileModal';
 
 const Home = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const navigateToHealthCare = () => {
     navigate('/health-care');
   };
 
+  const handleLogout = () => {
+    console.log("Logout button clicked");
+    logout();
+    console.log("User logged out");
+    navigate('/login');
+  };
+
   return (
-    <div className="min-h-screen flex flex-col justify-center ">
+    <div className="min-h-screen flex flex-col justify-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-semibold text-black">Research Areas</h1>
-          <Button className="hover:bg-gray-700 hover:text-white">My Profile</Button>
+          <div>
+            <Button className="mr-4 hover:bg-gray-700 hover:text-white" onClick={handleLogout}>Logout</Button>
+            <Button className="hover:bg-gray-700 hover:text-white" onClick={() => setIsModalOpen(true)}>My Profile</Button>
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           <Card onClick={navigateToHealthCare} className="cursor-pointer hover:shadow-lg transition-shadow">
-            <CardContent>
+            <CardContent> 
               <HospitalIcon className="w-16 h-16 mb-4 text-black" />
               <h2 className="font-semibold text-lg text-black">Health Care</h2>
             </CardContent>
@@ -69,6 +84,7 @@ const Home = () => {
           </Card>
         </div>
       </div>
+      <ProfileModal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} />
     </div>
   );
 };

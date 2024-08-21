@@ -1,20 +1,27 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Home from './pages/home';
 import HealthCare from './pages/healthCare';
-import DataTables from './pages/healthCareDataTables';
-// Import other components for respective pages
+import DataTables from './pages/DataTables';
+import DataDetail from './components/DataDetail';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './context/AuthContext';
 
 const App = () => {
   return (
-    <Router>
+    <AuthProvider>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/health-care" element={<HealthCare />} />
-        <Route path="/health-care/data-tables" element={<DataTables />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/" element={<ProtectedRoute element={<Home />} />} />
+        <Route path="/health-care" element={<ProtectedRoute element={<HealthCare />} />} />
+        <Route path="/health-care/data-tables" element={<ProtectedRoute element={<DataTables />} />} />
+        <Route path="/data/:id" element={<ProtectedRoute element={<DataDetail />} />} />
         {/* Add other routes here */}
       </Routes>
-    </Router>
+    </AuthProvider>
   );
 };
 
